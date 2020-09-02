@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -31,11 +32,40 @@ class _HomeState extends State<Home> {
         title: Text('\$ Conversor de Moedas \$'),
         centerTitle: true,
         backgroundColor: Colors.amber,
-
-        actions: <Widget>[
-        ],
       ),
-
+      body: FutureBuilder<Map>(
+        future: getData(),
+        builder: (context, snapshot){
+          switch(snapshot.connectionState){
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return Center(
+                child: Text(
+                  'Carregando Dados...',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.amber,
+                      fontSize: 25.0
+                  ),
+                )
+              );
+            default:
+              if(snapshot.hasError){
+                return Center(
+                    child: Text(
+                      'Erro',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.amber,
+                          fontSize: 25.0
+                      ),
+                    )
+                );
+              } else {
+                return Container(color: Colors.green,);
+              }
+          }
+        }),
     );
   }
 }
